@@ -31,5 +31,10 @@
 3. 공포 점수 시스템 도입
 
 
-배운 점: AIController 소스파일에 AIPerception Component를 생성하면, 그 AIC를 사용하는 AI들은 Perception 을 가지게 된다. 예시로 AIC에 Eye Perception 을 주고 AI에 AIC를 적용하면 Eye Perception 을 가지게 된다.
+배운 점<br>
+AIController 소스파일에 AIPerception Component를 생성하면, 그 AIC를 사용하는 AI들은 Perception 을 가지게 된다. 예시로 AIC에 Eye Perception 을 주고 AI에 AIC를 적용하면 Eye Perception 을 가지게 된다.
+
+
+
+
 
