@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "MyCharacter.generated.h"
@@ -19,6 +20,9 @@ public:
 	AMyCharacter();
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,Category = "MyFPS_Cam")
 	TObjectPtr<UCameraComponent> FPS_Camera;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,Category=  "MyFps_Cam")
+	TObjectPtr<USpringArmComponent> CameraBoom;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> AIPerceptionStimuliSourceComp;

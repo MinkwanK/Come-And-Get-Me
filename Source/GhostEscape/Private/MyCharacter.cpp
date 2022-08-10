@@ -13,9 +13,14 @@ AMyCharacter::AMyCharacter()
 	bUseControllerRotationPitch = true;
 	bUseControllerRotationYaw = true;
 	FPS_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_Camera")); //플레이어 카메라
-	FPS_Camera->SetupAttachment(RootComponent); //캡슐 컴포넌트에 부착하기
-	FPS_Camera->SetRelativeLocation(FVector(30.0f,0.0f,BaseEyeHeight));
 	AIPerceptionStimuliSourceComp = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIPerceptionStumuliSourceComponent"));
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+
+	CameraBoom->SetupAttachment(RootComponent);
+	FPS_Camera->SetupAttachment(CameraBoom); //캡슐 컴포넌트에 부착하기
+	
+	CameraBoom->SetRelativeLocation(FVector(30.0f,0.0f,BaseEyeHeight));
+
 	AIPerceptionStimuliSourceComp->RegisterForSense(Sight);
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 	
