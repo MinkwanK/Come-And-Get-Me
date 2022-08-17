@@ -31,6 +31,9 @@ AEnemyAIController::AEnemyAIController()
 	AIPerceptionComponent->ConfigureSense(*Sight); 
 	AIPerceptionComponent->SetDominantSense(Sight->GetSenseImplementation());
 
+	bCanSeeTarget = true;
+	TargetLossCnt = 3;
+
 	
 }
 
@@ -54,22 +57,47 @@ void AEnemyAIController::OnPerception(AActor* Actor, FAIStimulus Stimuls)
 	
 	if(Player == nullptr)
 	{
+		UE_LOG(LogTemp,Log,TEXT("Target percetion failed"));
 		AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn());
 		Enemy->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 		
-
+		bCanSeeTarget = false;
 		return; 
 	}
 	else 
-	{
+	{   //플레이어를 볼때마다 호출된다.
 		BlackboardComponent->SetValueAsObject("TargetPlayer",Player); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
 		AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn());
 		if(Enemy)
 		{
+			UE_LOG(LogTemp,Log,TEXT("Target percetion success"));
 			Enemy->GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+			
+			
+			TargetLossCnt  = 3;
+			GetWorldTimerManager().ClearTimer(TargetLossTimerHandle);
+			GetWorldTimerManager().SetTimer(TargetLossTimerHandle,this,&AEnemyAIController::TargetLoss,1.0f,true);  
 		}
+		
 	}
 }
+
+void AEnemyAIController::TargetLoss()
+{
+	UE_LOG(LogTemp,Log,TEXT("TargetLoss Count"));
+	
+	TargetLossCnt--;
+		if(TargetLossCnt<0)
+		{
+			AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn());
+			Enemy->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+			BlackboardComponent->SetValueAsObject("TargetPlayer",nullptr);
+			GetWorldTimerManager().ClearTimer(TargetLossTimerHandle);
+		}
+}
+	
+	
+
 
 	
 	void AEnemyAIController::BeginPlay()
@@ -86,6 +114,8 @@ void AEnemyAIController::OnPerception(AActor* Actor, FAIStimulus Stimuls)
 		{
 			Agent = Enemy; //한명의 플레이어만 타겟으로 삼지 않나?!
 		}
+
+		
 	
 	
 	

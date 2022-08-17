@@ -35,10 +35,6 @@ public:
 	
 	void OnPerception(AActor* Actor, FAIStimulus Stimulus); //Perception Update가 될때 호출된다.
 	
-
-
-	void TargetLostTime(); //타겟 인지 상실 시간 함수 
-	
 	class UAISenseConfig_Sight* Sight; //시야 감각을 위함.
 
 protected:
@@ -56,6 +52,8 @@ protected:
 	//우리가 컨트롤하고 싶은 액터가 스폰되면 이 함수가 실행된다. 이 함수안에서 블랙보드와 비헤비어트리를 초기화 합니다.
 	
 	virtual void OnPossess(APawn* InPawn) override;
+
+	void TargetLoss();
 
 private:
 	/*
@@ -89,6 +87,11 @@ private:
 	TObjectPtr<UAIPerceptionComponent> AIPerceptionComponent;
 
 	TArray<AActor*> BotTargetPoints;
+	bool bCanSeeTarget;
+	int32 TargetLossCnt;
+	FTimerHandle TargetLossTimerHandle;
+
+	
 	
 
 

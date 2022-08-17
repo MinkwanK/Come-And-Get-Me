@@ -18,11 +18,7 @@ class GHOSTESCAPE_API AMyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,Category = "MyFPS_Cam")
-	TObjectPtr<UCameraComponent> FPS_Camera;
-
-	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,Category=  "MyFps_Cam")
-	TObjectPtr<USpringArmComponent> CameraBoom;
+	
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> AIPerceptionStimuliSourceComp;
@@ -30,13 +26,16 @@ public:
 	//UClass에 안전성을 추가한 것이다.
 	TSubclassOf<UAISense_Sight> Sight;
 
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> AttackSound;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	
 
-	
+	void Attack();
 	void Run();
 	void StopRun();
 	
@@ -46,6 +45,16 @@ protected:
 	void MoveRight(float Value);
 	void MoveForward(float Value);
 
+private:
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "MyFPS_Cam", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCameraComponent> FPS_Camera;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category=  "MyFps_Cam",meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USpringArmComponent> CameraBoom;
+
+
+
+	bool bDead;
 
 
 public:	
@@ -54,5 +63,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	
 
 };
