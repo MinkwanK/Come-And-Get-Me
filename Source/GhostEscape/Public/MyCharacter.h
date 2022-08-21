@@ -45,6 +45,10 @@ protected:
 	void MoveRight(float Value);
 	void MoveForward(float Value);
 
+	int State; //캐릭터의 현재 상태
+	// 0 : 기본상태 1: 공격상태 
+	bool Invisible;
+
 private:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "MyFPS_Cam", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FPS_Camera;
@@ -55,6 +59,10 @@ private:
 
 
 	bool bDead;
+	int InvisibleTime;
+
+	void PlayerDead();
+	void InvisibleTimeLoss();
 
 
 public:	
@@ -64,6 +72,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	UFUNCTION()
+	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+
+	FTimerHandle InvisibleTimerHandle;
 
 };

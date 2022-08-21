@@ -8,7 +8,7 @@ public class GhostEscape : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","AIModule","GameplayTasks","NavigationSystem" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","AIModule","GameplayTasks","NavigationSystem","UMG","Slate","SlateCore"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

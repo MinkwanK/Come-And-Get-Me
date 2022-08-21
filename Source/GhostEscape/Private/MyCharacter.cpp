@@ -4,7 +4,8 @@
 #include "GhostEscape/Public/MyCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "DrawDebugHelpers.h"
+#include "MyEnemy.h"
+#include "MyPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -16,7 +17,6 @@ AMyCharacter::AMyCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	
 	AIPerceptionStimuliSourceComp = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIPerceptionStumuliSourceComponent"));
@@ -30,7 +30,11 @@ AMyCharacter::AMyCharacter()
 	AIPerceptionStimuliSourceComp->RegisterForSense(Sight);
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 	this->SetHidden(false);
+	
 	bDead = false;
+	Invisible = true;
+	State = 0;
+	InvisibleTime = 5;
 	
 }
 
@@ -87,45 +91,40 @@ void AMyCharacter::MoveForward(float Value)
 	}
 }
 
-//라인트레이스를 사방으로 쏴서 맞는 적에게 공포 데미지를 준다.
-//플레이어 액터를 기준으로 좌측과 우측에 선을 긋는다.
-//두 선의 x,y축 사이에 적이 있으면 공격 성공 z축은 플레이어의 키높이 +- 오차만큼 
-//공격 소리 포함 (비명지르기, 소리는 여러개의 소리를 같이 쓸거다.)
+/*
+ <투명상태일때 가능한 플레이어의 민간인 공격>
+기본적으로 투명상태인데 공격 버튼을 누르면 투명 상태가 풀리며 소리를 지른다. 그리고 플레이어의 상태는 공격 상태가 된다.
+사람의 시야각안에 공격모드로 된 플레이어가 들어오면 큰 공포 데미지를 입는다.
+공격 소리 포함 (비명지르기, 소리는 여러개의 소리를 같이 쓸거다.)
+*/
 void AMyCharacter::Attack()
 {
-	UE_LOG(LogTemp,Log,TEXT("Attack"));
-	FHitResult Hit;
-
+	if(Invisible==true)
+	{
+		UE_LOG(LogTemp,Log,TEXT("Attack"));
 	
-	FVector Start = FPS_Camera->GetComponentLocation();
-	FVector End =  Start + (FPS_Camera->GetForwardVector()) * 1500.0f;
-	FVector Left = End;
-	Left.X -= 500.0;
-	FVector Right = End;
-	Right.X += 500.0;
-	
-	
-	FCollisionQueryParams QueryParams;
-	ECollisionChannel Channel = ECollisionChannel::ECC_Visibility; //어떤 객체가 다른 객체의 시야를 차단하는지를 판단하기 위해 트레이스 채널 사용
-	QueryParams.AddIgnoredActor(this); //이 라인 트레이스를 실행하는 액터를 무시한다.
+		Invisible = false;
+		State = 1;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
 
-	
-	
-	GetWorld()->LineTraceSingleByChannel(Hit,Start,End,Channel,QueryParams);
-		
-	GetWorld()->LineTraceSingleByChannel(Hit,Start,Left,Channel,QueryParams);
-	GetWorld()->LineTraceSingleByChannel(Hit,Start,Right,Channel,QueryParams);
-
-	DrawDebugLine(GetWorld(),Start,End,FColor::Red,false, 2.0f);
-	DrawDebugLine(GetWorld(),Start,Left,FColor::Blue,false, 2.0f);
-	DrawDebugLine(GetWorld(),Start,Right,FColor::Green,false, 2.0f);
-
-
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
-
-
+		GetWorldTimerManager().SetTimer(InvisibleTimerHandle,this,&AMyCharacter::InvisibleTimeLoss,1.0f,true);
+	}
 	
 }
+
+void AMyCharacter::InvisibleTimeLoss()
+{
+	InvisibleTime--;
+	UE_LOG(LogTemp,Log,TEXT("Invisible Timer"))
+	if(InvisibleTime<0)
+	{
+		UE_LOG(LogTemp,Log,TEXT("Invisible Again"))
+		Invisible = true;
+		InvisibleTime = 5;
+		GetWorldTimerManager().ClearTimer(InvisibleTimerHandle);
+	}
+}
+
 void AMyCharacter::Run()
 {
 	this->GetCharacterMovement()->MaxWalkSpeed = 600.0f;
@@ -143,6 +142,36 @@ void AMyCharacter::ActiveCrouch()
 	else
 		Crouch();
 }
+
+void AMyCharacter::PlayerDead()
+{
+	if(bDead==true)
+	{
+		UE_LOG(LogTemp,Log,TEXT("Dead"));
+
+		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
+
+		if(PlayerController != nullptr)
+		{
+			UE_LOG(LogTemp,Log,TEXT("플레이어컨트롤러"));
+			PlayerController->ShowRestartWidget();
+		}
+	}
+}
+
+void AMyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	AMyEnemy* Enemy = Cast<AMyEnemy>(Other);
+	
+	if(Enemy)
+	{
+		UE_LOG(LogTemp,Log,TEXT("적입니다."));
+		bDead = true;
+		PlayerDead();
+	}
+}
+
+
 
 
 
