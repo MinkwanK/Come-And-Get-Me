@@ -76,6 +76,7 @@
 적의 플레이어 시야 인지<br>
 공격 기능<br>
 맵의 짜임새 <br>
+플레이어 발소리 어색<br>
 
 ## 배운 점
 AIController 소스파일에 AIPerception Component를 생성하면, 그 AIC를 사용하는 AI들은 Perception 을 가지게 된다. 예시로 AIC에 Eye Perception 을 주고 AI에 AIC를 적용하면 Eye Perception 을 가지게 된다.
