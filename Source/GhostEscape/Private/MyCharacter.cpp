@@ -28,13 +28,14 @@ AMyCharacter::AMyCharacter()
 	FPS_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_Camera"));
 	FPS_Camera->SetupAttachment(CameraBoom);
 	AIPerceptionStimuliSourceComp->RegisterForSense(Sight);
-	this->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
 	this->SetHidden(false);
 	
 	bDead = false;
 	Invisible = true;
 	State = 0;
 	InvisibleTime = 5;
+	GameOverScaryWidgetTimer = 3;
 	
 }
 
@@ -42,6 +43,19 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	FString levelname = UGameplayStatics::GetCurrentLevelName(this);
+	
+	if(levelname == FString("StartMap"))
+	{
+		UE_LOG(LogTemp,Log,TEXT("StartMap"));
+		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
+		PlayerController->ShowMainMenuWidget();
+	}
+	else
+	{
+		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
+		PlayerController->HideMainMenuWidget();
+	}
 	
 }
 
@@ -49,6 +63,8 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
 
 }
 
@@ -78,6 +94,7 @@ void AMyCharacter::MoveRight(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetRightVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
+
 	}
 }
 
@@ -88,6 +105,7 @@ void AMyCharacter::MoveForward(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetForwardVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
+		
 	}
 }
 
@@ -115,10 +133,8 @@ void AMyCharacter::Attack()
 void AMyCharacter::InvisibleTimeLoss()
 {
 	InvisibleTime--;
-	UE_LOG(LogTemp,Log,TEXT("Invisible Timer"))
 	if(InvisibleTime<0)
 	{
-		UE_LOG(LogTemp,Log,TEXT("Invisible Again"))
 		Invisible = true;
 		InvisibleTime = 5;
 		GetWorldTimerManager().ClearTimer(InvisibleTimerHandle);
@@ -127,11 +143,11 @@ void AMyCharacter::InvisibleTimeLoss()
 
 void AMyCharacter::Run()
 {
-	this->GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	this->GetCharacterMovement()->MaxWalkSpeed = 600.0;
 }
 void AMyCharacter::StopRun()
 {
-	this->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
 }
 void AMyCharacter::ActiveCrouch()
 {
@@ -147,17 +163,34 @@ void AMyCharacter::PlayerDead()
 {
 	if(bDead==true)
 	{
-		UE_LOG(LogTemp,Log,TEXT("Dead"));
 
 		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
 
 		if(PlayerController != nullptr)
 		{
-			UE_LOG(LogTemp,Log,TEXT("플레이어컨트롤러"));
+			PlayerController->ShowScaryGameOverWidget();
+			GetWorldTimerManager().SetTimer(GameOverScaryWidget_TimerHandle,this,&AMyCharacter::GameOverScaryWidget_TimeLoss,1.0f,true);
+		
+		}
+	}
+}
+
+void AMyCharacter::GameOverScaryWidget_TimeLoss()
+{
+	UE_LOG(LogTemp,Log,TEXT("Gameover scary Timer"))
+	GameOverScaryWidgetTimer--;
+	if(GameOverScaryWidgetTimer<0)
+	{
+		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
+		if(PlayerController != nullptr)
+		{
+			GetWorldTimerManager().ClearTimer(GameOverScaryWidget_TimerHandle);
+			PlayerController->HideScaryGameOverWidget();
 			PlayerController->ShowRestartWidget();
 		}
 	}
 }
+
 
 void AMyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -165,8 +198,8 @@ void AMyCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimit
 	
 	if(Enemy)
 	{
-		UE_LOG(LogTemp,Log,TEXT("적입니다."));
 		bDead = true;
+		Enemy->Destroy();
 		PlayerDead();
 	}
 }

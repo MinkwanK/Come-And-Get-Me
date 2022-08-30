@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	TObjectPtr<USoundBase> AttackSound;
 
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> FootStepSound;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,7 +49,7 @@ protected:
 	void MoveForward(float Value);
 
 	int State; //캐릭터의 현재 상태
-	// 0 : 기본상태 1: 공격상태 
+	// 0 : 기본상태  1: 공격상태  2 : 걷기 상태 3 : 뛰기 상태
 	bool Invisible;
 
 private:
@@ -76,5 +79,9 @@ public:
 	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	FTimerHandle InvisibleTimerHandle;
+	FTimerHandle GameOverScaryWidget_TimerHandle;
+
+	int GameOverScaryWidgetTimer;
+	void GameOverScaryWidget_TimeLoss();
 
 };

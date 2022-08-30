@@ -16,12 +16,43 @@ class GHOSTESCAPE_API AMyPlayerController : public APlayerController
 
 	UPROPERTY()
 	class URestartWidget* RestartWidget;
+	
+	UPROPERTY()
+	class UMainMenu* MainMenu;
+	
+	UPROPERTY()
+	class UScaryGameOver* ScaryGameOverWidget;
+	
 public:
+	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class URestartWidget> BP_RestartWidget;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UMainMenu> BP_MainMenu;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UScaryGameOver> BP_ScaryGameOver;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> GameOverScarySound;
+
+
+
 	void ShowRestartWidget();
 	void HideRestartWidget();
+
+	void ShowMainMenuWidget();
+	void HideMainMenuWidget();
+
+	void ShowScaryGameOverWidget();
+	void HideScaryGameOverWidget();
+
+	
+	
+
+
+	
 	
 	
 	

@@ -17,12 +17,28 @@ void URestartWidget::OnRestartClicked()
 	}
 }
 
+void URestartWidget::OnMenuButtonClicked()
+{
+	UGameplayStatics::OpenLevel(this,FName("StartMap"));
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetOwningPlayer());
+
+	if(PlayerController != nullptr)
+	{
+		PlayerController->ShowMainMenuWidget();
+	}
+}
+
+
 void URestartWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 	if(RestartButton != nullptr)
 	{
 		RestartButton->OnClicked.AddDynamic(this,&URestartWidget::OnRestartClicked);
+	}
+	if(MenuButton != nullptr)
+	{
+		MenuButton->OnClicked.AddDynamic(this,&URestartWidget::OnMenuButtonClicked);
 	}
 }
 

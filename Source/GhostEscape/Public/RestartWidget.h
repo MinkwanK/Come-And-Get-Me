@@ -13,13 +13,19 @@ UCLASS()
 class GHOSTESCAPE_API URestartWidget : public UUserWidget
 {
 	GENERATED_BODY()
+	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* RestartButton;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* MenuButton;
 
 public:
 	virtual void NativeOnInitialized() override;
 protected:
 	UFUNCTION()
 	void OnRestartClicked();
+	UFUNCTION()
+	void OnMenuButtonClicked();
 	
 };
