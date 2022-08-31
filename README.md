@@ -81,9 +81,16 @@
 공격 기능<br>
 맵의 짜임새 <br>
 리얼한 사운드<br>
+무섭지 않은 적 <br>
 
 ## 배운 점
 AIController 소스파일에 AIPerception Component를 생성하면, 그 AIC를 사용하는 AI들은 Perception 을 가지게 된다. 예시로 AIC에 Eye Perception 을 주고 AI에 AIC를 적용하면 Eye Perception 을 가지게 된다.
+
+## 피드백
+0.1v
+손전등이 있으면 좋겠다.
+삐에로에게 발각되면 계속 쫓아온다. 숨는 곳이 있으면 좋겠다.
+
 
 
 
