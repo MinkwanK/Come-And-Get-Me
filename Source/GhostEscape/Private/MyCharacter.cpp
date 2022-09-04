@@ -12,14 +12,22 @@
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+
 	
 	AIPerceptionStimuliSourceComp = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIPerceptionStumuliSourceComponent"));
+	
+	PlayerLightComp = CreateDefaultSubobject<UPointLightComponent>(TEXT("PlayerLightComponent"));
+	PlayerLightComp->SetupAttachment(GetMesh(),"LightSocket");
+	PlayerLightComp->SetIntensity(0.0f);
+	PlayerLightComp->AttenuationRadius = 500.0f;
+	
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetRelativeLocation(FVector(30.0f,0.0f,BaseEyeHeight));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -27,11 +35,13 @@ AMyCharacter::AMyCharacter()
 	CameraBoom->bUsePawnControlRotation = true;
 	FPS_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_Camera"));
 	FPS_Camera->SetupAttachment(CameraBoom);
+	
 	AIPerceptionStimuliSourceComp->RegisterForSense(Sight);
+	
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
 	this->SetHidden(false);
-	
 	bDead = false;
+	bLight = false;
 	Invisible = true;
 	State = 0;
 	InvisibleTime = 5;
@@ -79,6 +89,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&AMyCharacter::ActiveCrouch);
 	PlayerInputComponent->BindAction("Crouch",IE_Released,this,&AMyCharacter::ActiveCrouch);
 	PlayerInputComponent->BindAction("Attack",IE_Pressed,this,&AMyCharacter::Attack);
+	PlayerInputComponent->BindAction("Light",IE_Pressed,this,&AMyCharacter::LightOn);
+
 
 	PlayerInputComponent->BindAxis("Move Right",this,&AMyCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Move Forward",this,&AMyCharacter::MoveForward);
@@ -123,7 +135,7 @@ void AMyCharacter::Attack()
 	
 		Invisible = false;
 		State = 1;
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
+		//UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
 
 		GetWorldTimerManager().SetTimer(InvisibleTimerHandle,this,&AMyCharacter::InvisibleTimeLoss,1.0f,true);
 	}
@@ -158,6 +170,33 @@ void AMyCharacter::ActiveCrouch()
 	else
 		Crouch();
 }
+
+void AMyCharacter::LightOn()
+{
+	
+
+	if(bLight)
+	{
+		UE_LOG(LogTemp,Log,TEXT("Light Off"));
+		PlayerLightComp->SetIntensity(0.0f);
+		bLight = false;
+	}
+	else
+	{
+		UE_LOG(LogTemp,Log,TEXT("Light ON"));
+		PlayerLightComp->SetIntensity(500.0f);
+		bLight = true;
+	}
+
+}
+/*
+void AMyCharacter::LightOff()
+{
+	UE_LOG(LogTemp,Log,TEXT("Light Off"));
+	PlayerLightComp->SetIntensity(0.0f);
+}
+*/
+
 
 void AMyCharacter::PlayerDead()
 {

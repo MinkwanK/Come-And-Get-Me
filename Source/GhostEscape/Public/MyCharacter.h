@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
+#include "Components/PointLightComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
@@ -23,14 +24,19 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> AIPerceptionStimuliSourceComp;
 
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite);
+	TObjectPtr<UPointLightComponent> PlayerLightComp;
+
 	//UClass에 안전성을 추가한 것이다.
 	TSubclassOf<UAISense_Sight> Sight;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
-	TObjectPtr<USoundBase> AttackSound;
+	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	//TObjectPtr<USoundBase> AttackSound;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
-	TObjectPtr<USoundBase> FootStepSound;
+	
+	
+
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,6 +44,7 @@ protected:
 
 	
 
+	void LightOn();
 	void Attack();
 	void Run();
 	void StopRun();
@@ -62,6 +69,7 @@ private:
 
 
 	bool bDead;
+	bool bLight;
 	int InvisibleTime;
 
 	void PlayerDead();

@@ -25,6 +25,7 @@ AEnemyAIController::AEnemyAIController()
 	Sight->PeripheralVisionAngleDegrees = 90.0f; //좌우 시야 반경
 	Sight->DetectionByAffiliation.bDetectNeutrals = true;
 	
+	
 	//DetectionByAffiliation 는 적 ,중립 ,아군이 이 이 감각을 작동시킬 수 있는지?
 	//중립이 이 감각에 감지된다.
 
@@ -37,6 +38,25 @@ AEnemyAIController::AEnemyAIController()
 	
 }
 
+void AEnemyAIController::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn()); //현재 소유한 캐릭터가 적 클래스가 맞는지 확인합니다.
+	if (IsValid(BehaviorTree.Get()))
+	{
+		RunBehaviorTree(BehaviorTree.Get());
+		BehaviorTreeComponent->StartTree(*BehaviorTree.Get());
+	}
+	if(Enemy)
+	{
+		Agent = Enemy; //한명의 플레이어만 타겟으로 삼지 않나?!
+	}
+
+	
+}
+
+
 void AEnemyAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -45,10 +65,14 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 	{
 		Blackboard->InitializeBlackboard(*BehaviorTree.Get()->BlackboardAsset.Get());
 	}
+	
 	//사용 가능한 NPC이동 지점을 배열에 채웁니다.
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(),ABotTargetPoint::StaticClass(),BotTargetPoints);
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this,&AEnemyAIController::OnPerception);
+	
 }
+
+
 
 
 void AEnemyAIController::OnPerception(AActor* Actor, FAIStimulus Stimuls)
@@ -71,7 +95,7 @@ void AEnemyAIController::OnPerception(AActor* Actor, FAIStimulus Stimuls)
 		if(Enemy)
 		{
 			UE_LOG(LogTemp,Log,TEXT("Target percetion success"));
-			Enemy->GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+			Enemy->GetCharacterMovement()->MaxWalkSpeed = 550.0f;
 			
 			
 			TargetLossCnt  = 3;
@@ -100,26 +124,5 @@ void AEnemyAIController::TargetLoss()
 
 
 	
-	void AEnemyAIController::BeginPlay()
-	{
-		Super::BeginPlay();
 	
-		AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn()); //현재 소유한 캐릭터가 적 클래스가 맞는지 확인합니다.
-		if (IsValid(BehaviorTree.Get()))
-		{
-			RunBehaviorTree(BehaviorTree.Get());
-			BehaviorTreeComponent->StartTree(*BehaviorTree.Get());
-		}
-		if(Enemy)
-		{
-			Agent = Enemy; //한명의 플레이어만 타겟으로 삼지 않나?!
-		}
-
-		
-	
-	
-	
-	
-}
-
 

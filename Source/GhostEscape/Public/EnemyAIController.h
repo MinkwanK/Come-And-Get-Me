@@ -53,6 +53,8 @@ protected:
 	
 	virtual void OnPossess(APawn* InPawn) override;
 
+	//virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
+
 	void TargetLoss();
 
 private:

@@ -4,6 +4,7 @@
 #include "MyEnemy.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyEnemy::AMyEnemy()
@@ -11,6 +12,7 @@ AMyEnemy::AMyEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	EnemyLaughTime = 5;
 
 }
 
@@ -26,6 +28,7 @@ void AMyEnemy::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 void AMyEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	GetWorldTimerManager().SetTimer(LaughTimerHandle,this,&AMyEnemy::EnemyLaugh,1.0f,true);
 	
 }
 
@@ -43,3 +46,12 @@ void AMyEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void AMyEnemy::EnemyLaugh()
+{
+	EnemyLaughTime--;
+	if(EnemyLaughTime<0 )
+	{
+		UGameplayStatics::PlaySoundAtLocation(this,LaughSound,GetActorLocation());
+		EnemyLaughTime = 5;
+	}
+}
