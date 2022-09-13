@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyEnemy.h"
 #include "MyPlayerController.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -35,8 +36,12 @@ AMyCharacter::AMyCharacter()
 	CameraBoom->bUsePawnControlRotation = true;
 	FPS_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_Camera"));
 	FPS_Camera->SetupAttachment(CameraBoom);
+
+	NoiseEmitterComp = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitterComponent"));
 	
 	AIPerceptionStimuliSourceComp->RegisterForSense(Sight);
+	AIPerceptionStimuliSourceComp->RegisterForSense(Hearing);
+	
 	
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
 	this->SetHidden(false);
@@ -46,6 +51,7 @@ AMyCharacter::AMyCharacter()
 	State = 0;
 	InvisibleTime = 5;
 	GameOverScaryWidgetTimer = 3;
+	MaxMovementNoiseRange = 100.0f; //Max Noise Range when Walking
 	
 }
 
@@ -106,7 +112,7 @@ void AMyCharacter::MoveRight(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetRightVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
-
+		MakeNoise(1,this,GetActorLocation(),MaxMovementNoiseRange,"Noise");
 	}
 }
 
@@ -117,6 +123,7 @@ void AMyCharacter::MoveForward(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetForwardVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
+		MakeNoise(1,this,GetActorLocation(),MaxMovementNoiseRange,"Noise");
 		
 	}
 }
@@ -127,6 +134,8 @@ void AMyCharacter::MoveForward(float Value)
 사람의 시야각안에 공격모드로 된 플레이어가 들어오면 큰 공포 데미지를 입는다.
 공격 소리 포함 (비명지르기, 소리는 여러개의 소리를 같이 쓸거다.)
 */
+
+
 void AMyCharacter::Attack()
 {
 	if(Invisible==true)
@@ -135,8 +144,8 @@ void AMyCharacter::Attack()
 	
 		Invisible = false;
 		State = 1;
-		//UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
-
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
+		MakeNoise(1,this,GetActorLocation(),1000.0f,"Noise");
 		GetWorldTimerManager().SetTimer(InvisibleTimerHandle,this,&AMyCharacter::InvisibleTimeLoss,1.0f,true);
 	}
 	
@@ -153,13 +162,15 @@ void AMyCharacter::InvisibleTimeLoss()
 	}
 }
 
-void AMyCharacter::Run()
+void AMyCharacter::Run() //Change Movement Speed and NoiseRange
 {
 	this->GetCharacterMovement()->MaxWalkSpeed = 600.0;
+	MaxMovementNoiseRange = 1000.0f;
 }
 void AMyCharacter::StopRun()
 {
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
+	MaxMovementNoiseRange = 100.0f;
 }
 void AMyCharacter::ActiveCrouch()
 {
@@ -184,18 +195,12 @@ void AMyCharacter::LightOn()
 	else
 	{
 		UE_LOG(LogTemp,Log,TEXT("Light ON"));
-		PlayerLightComp->SetIntensity(500.0f);
+		PlayerLightComp->SetIntensity(800.0f);
 		bLight = true;
 	}
 
 }
-/*
-void AMyCharacter::LightOff()
-{
-	UE_LOG(LogTemp,Log,TEXT("Light Off"));
-	PlayerLightComp->SetIntensity(0.0f);
-}
-*/
+
 
 
 void AMyCharacter::PlayerDead()

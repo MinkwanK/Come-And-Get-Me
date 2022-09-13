@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
 #include "MyCharacter.generated.h"
 
@@ -27,11 +28,21 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite);
 	TObjectPtr<UPointLightComponent> PlayerLightComp;
 
+	UPROPERTY(VisibleAnywhere);
+	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitterComp;
+
 	//UClass에 안전성을 추가한 것이다.
 	TSubclassOf<UAISense_Sight> Sight;
+	TSubclassOf<UAISense_Hearing>Hearing;
 
-	//UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
-	//TObjectPtr<USoundBase> AttackSound;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> AttackSound;
+
+	FTimerHandle InvisibleTimerHandle;
+	FTimerHandle GameOverScaryWidget_TimerHandle;
+
+	int GameOverScaryWidgetTimer;
+	float MaxMovementNoiseRange;
 
 	
 	
@@ -86,10 +97,8 @@ public:
 	UFUNCTION()
 	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
-	FTimerHandle InvisibleTimerHandle;
-	FTimerHandle GameOverScaryWidget_TimerHandle;
-
-	int GameOverScaryWidgetTimer;
+	
+	
 	void GameOverScaryWidget_TimeLoss();
 
 };

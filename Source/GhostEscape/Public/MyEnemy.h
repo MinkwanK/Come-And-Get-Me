@@ -33,6 +33,7 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	TObjectPtr<USoundBase> LaughSound;
 
+	
 	int32 EnemyLaughTime;
 	FTimerHandle LaughTimerHandle;
 

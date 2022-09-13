@@ -14,6 +14,16 @@ class GHOSTESCAPE_API AMyCivilian : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMyCivilian();
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+    TObjectPtr<USoundBase> AfraidSound;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> IdleSound;
+
+	virtual void GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const override;
+
+	
 
 protected:
 	// Called when the game starts or when spawned

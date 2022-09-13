@@ -32,10 +32,15 @@ public:
 	class AMyEnemy* Agent;
 
 	UFUNCTION()
-	
-	void OnPerception(AActor* Actor, FAIStimulus Stimulus); //Perception Update가 될때 호출된다.
+	void OnTargetPerception(AActor* Actor, FAIStimulus Stimulus); //인지된 하나의 타겟 액터만 리턴한다.
+
+	//UFUNCTION()
+	//void OnPerception(TArray<AActor*> const& UpdatedActors); //여러개의 액터를 받을때
+
+
 	
 	class UAISenseConfig_Sight* Sight; //시야 감각을 위함.
+	class UAISenseConfig_Hearing* Hearing;
 
 protected:
 	
