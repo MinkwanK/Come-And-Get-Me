@@ -112,7 +112,11 @@ void AMyCharacter::MoveRight(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetRightVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
+<<<<<<< HEAD
 		MakeNoise(1,this,GetActorLocation(),MaxMovementNoiseRange,"Noise");
+=======
+		MakeNoise(1,this,GetActorLocation(),0,"Noise");
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 	}
 }
 
@@ -123,7 +127,11 @@ void AMyCharacter::MoveForward(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetForwardVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
+<<<<<<< HEAD
 		MakeNoise(1,this,GetActorLocation(),MaxMovementNoiseRange,"Noise");
+=======
+		MakeNoise(1,this,GetActorLocation(),0,"Noise");
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 		
 	}
 }
@@ -135,7 +143,11 @@ void AMyCharacter::MoveForward(float Value)
 공격 소리 포함 (비명지르기, 소리는 여러개의 소리를 같이 쓸거다.)
 */
 
+<<<<<<< HEAD
 
+=======
+/*
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 void AMyCharacter::Attack()
 {
 	if(Invisible==true)
@@ -145,12 +157,17 @@ void AMyCharacter::Attack()
 		Invisible = false;
 		State = 1;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
+<<<<<<< HEAD
 		MakeNoise(1,this,GetActorLocation(),1000.0f,"Noise");
+=======
+		UAISense_Hearing::ReportNoiseEvent(GetWorld(),GetActorLocation(),1,this,0,"Noise");
+		//MakeNoise(1,this,GetActorLocation(),1000.0f,"Noise");
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 		GetWorldTimerManager().SetTimer(InvisibleTimerHandle,this,&AMyCharacter::InvisibleTimeLoss,1.0f,true);
 	}
 	
 }
-
+*/
 void AMyCharacter::InvisibleTimeLoss()
 {
 	InvisibleTime--;

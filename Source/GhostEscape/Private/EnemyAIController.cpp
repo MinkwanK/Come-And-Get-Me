@@ -27,7 +27,11 @@ AEnemyAIController::AEnemyAIController()
 	
 
 	Hearing = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing Config"));
+<<<<<<< HEAD
 	Hearing->HearingRange = 2000.0f;
+=======
+	Hearing->HearingRange = 1000.0f;
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 	Hearing->DetectionByAffiliation.bDetectNeutrals = true;
 	Hearing->DetectionByAffiliation.bDetectFriendlies = true;
 	
@@ -38,7 +42,12 @@ AEnemyAIController::AEnemyAIController()
 
 	AIPerceptionComponent->ConfigureSense(*Sight);
 	AIPerceptionComponent->ConfigureSense(*Hearing);
+<<<<<<< HEAD
 
+
+=======
+	AIPerceptionComponent->SetDominantSense(Sight->GetSenseImplementation());
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 
 
 	bCanSeeTarget = true;
@@ -101,10 +110,13 @@ void AEnemyAIController::OnTargetPerception(AActor* Actor, FAIStimulus Stimuls)
 	else 
 	{   //플레이어를 볼때마다 호출된다.
 		UE_LOG(LogTemp,Log,TEXT("Target percetion success"));
+<<<<<<< HEAD
 		if(Stimuls.Tag == "Noise")
 		{
 			BlackboardComponent->SetValueAsVector("TargetLocation",Player->GetActorLocation()); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
 		}
+=======
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 		BlackboardComponent->SetValueAsObject("TargetPlayer",Player); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
 		AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn());
 		if(Enemy)

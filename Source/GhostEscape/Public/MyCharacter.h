@@ -42,7 +42,10 @@ public:
 	FTimerHandle GameOverScaryWidget_TimerHandle;
 
 	int GameOverScaryWidgetTimer;
+<<<<<<< HEAD
 	float MaxMovementNoiseRange;
+=======
+>>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
 
 	
 	
