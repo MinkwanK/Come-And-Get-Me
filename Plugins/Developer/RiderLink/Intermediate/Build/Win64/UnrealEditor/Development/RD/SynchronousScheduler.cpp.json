@@ -1,12 +1,12 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\scheduler\\synchronousscheduler.cpp",
+        "Source": "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\scheduler\\synchronousscheduler.cpp",
         "ProvidedModule": "",
         "Includes": [
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\rd\\definitions.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\scheduler\\synchronousscheduler.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\scheduler\\base\\ischeduler.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\rd\\definitions.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\scheduler\\synchronousscheduler.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\scheduler\\base\\ischeduler.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\functional",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\yvals_core.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\vcruntime.h",
@@ -101,8 +101,8 @@
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.19041.0\\ucrt\\math.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\vcruntime_startup.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\xthreads.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\rd_framework_export.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\util\\guards.h"
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\rd_framework_export.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\src\\rd_framework_cpp\\src\\main\\util\\guards.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

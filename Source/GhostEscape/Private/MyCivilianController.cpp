@@ -3,9 +3,11 @@
 //민간인 AI, 무작위 이동 또는 특정 행동을 하다가, 플레이어를 마주치면, 도망가거나 상호작용 행동 수행(웅크리기, 벌벌떨기)
 
 #include "MyCivilianController.h"
-
+#include "GameFramework/CharacterMovementComponent.h"
 #include "MyCharacter.h"
-#include "MyEnemy.h"
+#include "MyCivilian.h"
+#include "Kismet/GameplayStatics.h"
+
 
 AMyCivilianController::AMyCivilianController()
 {
@@ -13,6 +15,8 @@ AMyCivilianController::AMyCivilianController()
 	BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("Blackboard Component"));
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerception Component"));
 
+
+	
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
 	Sight->SightRadius = 2000.0f;
 	Sight->LoseSightRadius = Sight->SightRadius + 500.0f;
@@ -26,6 +30,15 @@ AMyCivilianController::AMyCivilianController()
 
 	AIPerceptionComponent->ConfigureSense(*Sight);
 	AIPerceptionComponent->ConfigureSense(*Hearing);
+
+
+
+	TargetLossCnt = 1.5;
+	//Civilian이 첫 데미지를 받았는지 여부이다 플레이어를 인지할 때마다 데미지가 들어오는 것을 방지하기 위함이다.
+	FirstGotDamage = false;
+
+
+	
 
 
 
@@ -53,18 +66,101 @@ void AMyCivilianController::OnPossess(APawn* InPawn)
 	}
 
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this,&AMyCivilianController::OnTargetPerception);
+	AMyCivilian* Civilian = Cast<AMyCivilian>(InPawn);
+	
+	
+	
 }
 
 void AMyCivilianController::OnTargetPerception(AActor* Actor, FAIStimulus Stimulus)
 {
 	AMyCharacter* Player = Cast<AMyCharacter>(Actor);
-
-	if(Player)
+	AMyCivilian* Civilian = Cast<AMyCivilian>(GetPawn());
+	//UHorrorScoreComponent* HorrorComp = Player->FindComponentByClass<UHorrorScoreComponent>();
+	UHealthComponent* HealthComp = Civilian->FindComponentByClass<UHealthComponent>(); //접근 원하는 컴포넌트의 클래스를 알려줌
+	if(Player == nullptr)
 	{
-		
+		//UE_LOG(LogTemp,Log,TEXT("Target percetion failed"));
+		Civilian->GetCharacterMovement()->MaxWalkSpeed = 200.0f;
+		return; 
 	}
-	else
+	else 
 	{
+	
+		if(Stimulus.Tag == "Noise") //플레이어 소리
+		{
+			return; 
+			/*
+			Civilian->state[1] = true; //0 평시 1 소리듣기 2 적 발견
+			Civilian->CanHear = true;
+			BlackboardComponent->SetValueAsBool("CanHear",true); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
+			BlackboardComponent->SetValueAsVector("TargetSoundLocation",Player->GetActorLocation());
+			GetWorldTimerManager().ClearTimer(TargetLossTimerHandle);
+			GetWorldTimerManager().SetTimer(TargetLossTimerHandle,this,&AMyCivilianController::TargetLoss,1.0f,true);
+			*/
+		}
+	
+		if(Stimulus.Tag == "AttackNoise") //플레이어의 공격
+		{
+			Civilian->state[1] = true; //0 평시 1 소리듣기 2 적 발견
+			if(HealthComp != nullptr)
+			{
+				FirstGotDamage = true;
+				HealthComp->LoseHealth(50,Civilian);
+				//HorrorComp->getHorrorScore(50);
+				
+			}
+			BlackboardComponent->SetValueAsBool("CanHear",true); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
+			BlackboardComponent->SetValueAsVector("TargetSoundLocation",Player->GetActorLocation());
+			GetWorldTimerManager().ClearTimer(TargetLossTimerHandle);
+			GetWorldTimerManager().SetTimer(TargetLossTimerHandle,this,&AMyCivilianController::TargetLoss,1.0f,true); 
+		}
+		else
+		{
+			Civilian->state[2]=true;
+			Civilian->CanSeePlayer = true;
+			if(Civilian->state[1] == true && Civilian->state[2] == true) //소리도 들렸고, 모습도 보였으면
+			{
+				if(HealthComp != nullptr && FirstGotDamage == false)
+				{
+					FirstGotDamage = true;
+					HealthComp->LoseHealth(30,Civilian);
+					//HorrorComp->getHorrorScore(30);
+					
+				}
+			}
+			else if(Civilian->state[1] == false && Civilian->state[2] == true) //모습만 보이면
+			{
+				if(HealthComp!=nullptr && FirstGotDamage == false)
+				{
+					FirstGotDamage = true;
+					HealthComp->LoseHealth(50,Civilian);
+					//HorrorComp->getHorrorScore(50);
+				
+				}
+			}
+			//UE_LOG(LogTemp,Log,TEXT("Player percetion success"));
+			Civilian->GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+			BlackboardComponent->SetValueAsBool("CanSeePlayer",true); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
+			UE_LOG(LogTemp,Log,TEXT("Target Player Update Succeede"));
+		
+		}
+		
 		
 	}
 }
+
+void AMyCivilianController::TargetLoss() //TargetSound Locaiton 인지 상실 타이머
+{
+	TargetLossCnt--;
+	if(TargetLossCnt<0)
+	{
+		AMyCivilian* Civilian = Cast<AMyCivilian>(GetPawn());
+		Civilian->state[1] = false;
+		Civilian->CanHear = false;
+		TargetLossCnt  = 3.0;
+		BlackboardComponent->SetValueAsBool("CanHear",false);
+		GetWorldTimerManager().ClearTimer(TargetLossTimerHandle);
+	}
+}
+

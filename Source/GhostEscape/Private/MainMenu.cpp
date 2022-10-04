@@ -2,13 +2,13 @@
 
 
 #include "MainMenu.h"
-
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 
 void UMainMenu::OnStartButtonClicked()
 {
 	UGameplayStatics::OpenLevel(this,FName("TestMap"));
+
 }
 
 void UMainMenu::OnExitButtonClicked()

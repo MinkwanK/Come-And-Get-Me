@@ -1,11 +1,11 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\rd.cpp",
+        "Source": "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\rd.cpp",
         "ProvidedModule": "",
         "Includes": [
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\rd\\definitions.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\rd.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\rd\\definitions.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\rd.h",
             "d:\\ue_5.0\\engine\\source\\runtime\\core\\public\\logging\\logmacros.h",
             "d:\\ue_5.0\\engine\\source\\runtime\\core\\public\\coretypes.h",
             "d:\\ue_5.0\\engine\\source\\runtime\\core\\public\\hal\\platform.h",

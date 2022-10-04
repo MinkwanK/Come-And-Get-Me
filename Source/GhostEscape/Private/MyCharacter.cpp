@@ -2,12 +2,16 @@
 
 
 #include "GhostEscape/Public/MyCharacter.h"
+
+#include "MyCivilian.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyEnemy.h"
 #include "MyPlayerController.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 
 // Sets default values
@@ -23,33 +27,46 @@ AMyCharacter::AMyCharacter()
 
 	
 	AIPerceptionStimuliSourceComp = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIPerceptionStumuliSourceComponent"));
+
+
+	bCanSeeCivilian = false;
+	
+	
+	
 	
 	PlayerLightComp = CreateDefaultSubobject<UPointLightComponent>(TEXT("PlayerLightComponent"));
 	PlayerLightComp->SetupAttachment(GetMesh(),"LightSocket");
 	PlayerLightComp->SetIntensity(0.0f);
 	PlayerLightComp->AttenuationRadius = 500.0f;
-	
+
+	/*
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetRelativeLocation(FVector(30.0f,0.0f,BaseEyeHeight));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 300;
 	CameraBoom->bUsePawnControlRotation = true;
+	*/
+	//FName CameraSocket(TEXT("head"));
 	FPS_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_Camera"));
-	FPS_Camera->SetupAttachment(CameraBoom);
+	FPS_Camera->SetupAttachment(GetMesh(),TEXT("head"));
+	FPS_Camera->bUsePawnControlRotation = true;
+	
 
 	NoiseEmitterComp = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitterComponent"));
 	
 	AIPerceptionStimuliSourceComp->RegisterForSense(Sight);
 	AIPerceptionStimuliSourceComp->RegisterForSense(Hearing);
+
+	HorrorScoreComp = CreateDefaultSubobject<UHorrorScoreComponent>(TEXT("HorrorScoreComp"));
 	
 	
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
 	this->SetHidden(false);
+	
 	bDead = false;
 	bLight = false;
-	Invisible = true;
 	State = 0;
-	InvisibleTime = 5;
+
 	GameOverScaryWidgetTimer = 3;
 	MaxMovementNoiseRange = 100.0f; //Max Noise Range when Walking
 	
@@ -60,7 +77,9 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	FString levelname = UGameplayStatics::GetCurrentLevelName(this);
-	
+
+	// 첫 시작 Start Map 용
+	/*
 	if(levelname == FString("StartMap"))
 	{
 		UE_LOG(LogTemp,Log,TEXT("StartMap"));
@@ -72,6 +91,7 @@ void AMyCharacter::BeginPlay()
 		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
 		PlayerController->HideMainMenuWidget();
 	}
+	*/
 	
 }
 
@@ -80,7 +100,7 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
+	
 
 }
 
@@ -112,11 +132,10 @@ void AMyCharacter::MoveRight(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetRightVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
-<<<<<<< HEAD
+
 		MakeNoise(1,this,GetActorLocation(),MaxMovementNoiseRange,"Noise");
-=======
-		MakeNoise(1,this,GetActorLocation(),0,"Noise");
->>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
+
+
 	}
 }
 
@@ -127,62 +146,60 @@ void AMyCharacter::MoveForward(float Value)
 		const FRotator YawRotation(0,Controller->GetControlRotation().Yaw,0); //카메라가 바라보는 방향을 기준으로 캐릭터가 이동하기 위해서 yaw값을 구한다.
 		const FVector Direction = UKismetMathLibrary::GetForwardVector(YawRotation); //YawRotation을 가리키는 벡터를 구한다.
 		AddMovementInput(Direction,Value);
-<<<<<<< HEAD
+
 		MakeNoise(1,this,GetActorLocation(),MaxMovementNoiseRange,"Noise");
-=======
-		MakeNoise(1,this,GetActorLocation(),0,"Noise");
->>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
+
+
+
 		
 	}
 }
 
-/*
- <투명상태일때 가능한 플레이어의 민간인 공격>
-기본적으로 투명상태인데 공격 버튼을 누르면 투명 상태가 풀리며 소리를 지른다. 그리고 플레이어의 상태는 공격 상태가 된다.
-사람의 시야각안에 공격모드로 된 플레이어가 들어오면 큰 공포 데미지를 입는다.
-공격 소리 포함 (비명지르기, 소리는 여러개의 소리를 같이 쓸거다.)
-*/
 
-<<<<<<< HEAD
 
-=======
-/*
->>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
+
+//라인트레이스 쓰기
+//캐릭터가 태어난 후부터 계속 해서 쏘고, 민간인이 맞으면 UI 띄우기
+
 void AMyCharacter::Attack()
 {
-	if(Invisible==true)
-	{
-		UE_LOG(LogTemp,Log,TEXT("Attack"));
-	
-		Invisible = false;
 		State = 1;
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
-<<<<<<< HEAD
-		MakeNoise(1,this,GetActorLocation(),1000.0f,"Noise");
-=======
-		UAISense_Hearing::ReportNoiseEvent(GetWorld(),GetActorLocation(),1,this,0,"Noise");
-		//MakeNoise(1,this,GetActorLocation(),1000.0f,"Noise");
->>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
-		GetWorldTimerManager().SetTimer(InvisibleTimerHandle,this,&AMyCharacter::InvisibleTimeLoss,1.0f,true);
-	}
+	
+		FHitResult Hit; //라인트레이스 결과 저장
+
+		FVector Start = FPS_Camera->GetComponentLocation();
+		FVector End = Start +FPS_Camera->GetForwardVector()*1500.0f;
+		//FVector End = Start + Start.ForwardVector * 1500.0f;
+
+		ECollisionChannel Channel = ECollisionChannel::ECC_Visibility;
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+
+		GetWorld()->LineTraceSingleByChannel(Hit,Start,End,Channel,QueryParams);
+
+		DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,3);
+	
+		//UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
+		//MakeNoise(1,this,GetActorLocation(),1000.0f,"AttackNoise");
+		/*
+			if(GetDistanceTo(TargetCivilian) <= 500)
+			{
+				UE_LOG(LogTemp,Log,TEXT("공격 가능!"));
+			}
+		*/			
+		
+	
+	
 	
 }
-*/
-void AMyCharacter::InvisibleTimeLoss()
-{
-	InvisibleTime--;
-	if(InvisibleTime<0)
-	{
-		Invisible = true;
-		InvisibleTime = 5;
-		GetWorldTimerManager().ClearTimer(InvisibleTimerHandle);
-	}
-}
+
+
+
 
 void AMyCharacter::Run() //Change Movement Speed and NoiseRange
 {
 	this->GetCharacterMovement()->MaxWalkSpeed = 600.0;
-	MaxMovementNoiseRange = 1000.0f;
+	MaxMovementNoiseRange = 500.0f;
 }
 void AMyCharacter::StopRun()
 {
@@ -193,10 +210,16 @@ void AMyCharacter::ActiveCrouch()
 {
 	if(bIsCrouched)
 	{
+		UE_LOG(LogTemp,Log,TEXT("UnCrouch"));
 		UnCrouch();
+		MaxMovementNoiseRange = 100.0f;
 	}
 	else
+	{
+		UE_LOG(LogTemp,Log,TEXT("Crouch"));
 		Crouch();
+		MaxMovementNoiseRange = 5.0f;
+	}
 }
 
 void AMyCharacter::LightOn()
@@ -217,6 +240,7 @@ void AMyCharacter::LightOn()
 	}
 
 }
+
 
 
 

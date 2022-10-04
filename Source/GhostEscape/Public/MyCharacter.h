@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HorrorScoreComponent.h"
+#include "MyCivilian.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PointLightComponent.h"
 #include "GameFramework/Character.h"
@@ -37,15 +39,27 @@ public:
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	TObjectPtr<USoundBase> AttackSound;
-
-	FTimerHandle InvisibleTimerHandle;
+	
+	class UAISenseConfig_Sight* SenseSight;
+	
 	FTimerHandle GameOverScaryWidget_TimerHandle;
+	FTimerHandle AttackTimerHandle;
+	FTimerHandle TargetFoundTimerHandle;
 
+	int AttackTime;
+	int TargetFoundTime;
+	
 	int GameOverScaryWidgetTimer;
-<<<<<<< HEAD
+
 	float MaxMovementNoiseRange;
-=======
->>>>>>> efcdd948ca81e57b3507261da84f1233c620ef0d
+
+	bool bCanSeeCivilian;
+
+	
+	void AttackTimeLoss();
+	void TargetFoundTimeLoss();
+
+
 
 	
 	
@@ -56,7 +70,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TObjectPtr<UHorrorScoreComponent> HorrorScoreComp;
 
 	void LightOn();
 	void Attack();
@@ -71,23 +86,23 @@ protected:
 
 	int State; //캐릭터의 현재 상태
 	// 0 : 기본상태  1: 공격상태  2 : 걷기 상태 3 : 뛰기 상태
-	bool Invisible;
-
+	
 private:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "MyFPS_Cam", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FPS_Camera;
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category=  "MyFps_Cam",meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USpringArmComponent> CameraBoom;
+	//UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category=  "MyFps_Cam",meta = (AllowPrivateAccess = "true"))
+	//TObjectPtr<USpringArmComponent> CameraBoom;
 
+	
 
 
 	bool bDead;
 	bool bLight;
-	int InvisibleTime;
+
 
 	void PlayerDead();
-	void InvisibleTimeLoss();
+	
 
 
 public:	

@@ -23,6 +23,9 @@ class GHOSTESCAPE_API AMyPlayerController : public APlayerController
 	UPROPERTY()
 	class UScaryGameOver* ScaryGameOverWidget;
 	
+	UPROPERTY()
+	class UInGameUI* InGameUI;
+	
 public:
 	
 	UPROPERTY(EditDefaultsOnly)
@@ -37,6 +40,9 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	TObjectPtr<USoundBase> GameOverScarySound;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UInGameUI> BP_InGameUI;
+
 
 
 	void ShowRestartWidget();
@@ -47,6 +53,9 @@ public:
 
 	void ShowScaryGameOverWidget();
 	void HideScaryGameOverWidget();
+
+	void ShowInGameUI();
+	void HideInGameUI();
 
 	
 	

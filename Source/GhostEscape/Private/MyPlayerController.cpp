@@ -2,10 +2,23 @@
 
 
 #include "MyPlayerController.h"
+
+#include "InGameUI.h"
 #include "RestartWidget.h"
 #include "MainMenu.h"
 #include "ScaryGameOver.h"
 #include "Kismet/GameplayStatics.h"
+
+
+void AMyPlayerController::ShowInGameUI()
+{
+	if(BP_InGameUI != nullptr)
+	{
+		InGameUI = CreateWidget<UInGameUI>(this,BP_InGameUI);
+		InGameUI->AddToViewport();
+		
+	}
+}
 
 
 
@@ -13,6 +26,8 @@ void AMyPlayerController::ShowRestartWidget()
 {
 	if(BP_RestartWidget != nullptr)
 	{
+		InGameUI->RemoveFromParent();
+		InGameUI->Destruct();
 		SetPause(true);
 		SetInputMode(FInputModeUIOnly());
 		bShowMouseCursor = true;

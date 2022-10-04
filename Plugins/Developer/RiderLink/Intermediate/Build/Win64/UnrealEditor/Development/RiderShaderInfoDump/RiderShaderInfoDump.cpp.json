@@ -1,11 +1,11 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\ridershaderinfodump\\ridershaderinfodump.cpp",
+        "Source": "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\ridershaderinfodump\\ridershaderinfodump.cpp",
         "ProvidedModule": "",
         "Includes": [
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\ridershaderinfodump\\definitions.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\ridershaderinfodump\\ridershaderinfodump.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\ridershaderinfodump\\definitions.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\ridershaderinfodump\\ridershaderinfodump.h",
             "d:\\ue_5.0\\engine\\source\\runtime\\core\\public\\modules\\moduleinterface.h",
             "d:\\ue_5.0\\engine\\source\\runtime\\core\\public\\coretypes.h",
             "d:\\ue_5.0\\engine\\source\\runtime\\core\\public\\hal\\platform.h",

@@ -1,11 +1,11 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\src\\fmt.cpp",
+        "Source": "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\src\\fmt.cpp",
         "ProvidedModule": "",
         "Includes": [
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\rd\\definitions.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\include\\spdlog\\fmt\\bundled\\format-inl.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\rd\\definitions.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\include\\spdlog\\fmt\\bundled\\format-inl.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\cassert",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\yvals_core.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\vcruntime.h",
@@ -61,7 +61,7 @@
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.19041.0\\ucrt\\corecrt_wtime.h",
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.19041.0\\ucrt\\sys\\stat.h",
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.19041.0\\ucrt\\sys\\types.h",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\include\\spdlog\\fmt\\bundled\\format.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\include\\spdlog\\fmt\\bundled\\format.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\algorithm",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\xmemory",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\cstdint",
@@ -92,7 +92,7 @@
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\xstring",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\xpolymorphic_allocator.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\tuple",
-            "d:\\unrealproject\\ghost-escape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\include\\spdlog\\fmt\\bundled\\core.h",
+            "d:\\unrealproject\\ghostescape\\plugins\\developer\\riderlink\\source\\rd\\thirdparty\\spdlog\\include\\spdlog\\fmt\\bundled\\core.h",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\functional",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\unordered_map",
             "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.32.31326\\include\\xhash",

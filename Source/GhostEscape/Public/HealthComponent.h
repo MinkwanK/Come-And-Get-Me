@@ -1,0 +1,35 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "MyCivilian.h"
+#include "HorrorScoreComponent.h"
+#include "Components/ActorComponent.h"
+#include "HealthComponent.generated.h"
+
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class GHOSTESCAPE_API UHealthComponent : public UActorComponent
+{
+	GENERATED_BODY()
+
+public:	
+	// Sets default values for this component's properties
+	UHealthComponent();
+
+	void LoseHealth(int amount,AMyCivilian* Civilian);
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly,Category=Health)
+	int Health = 100;
+
+public:	
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+		
+};
