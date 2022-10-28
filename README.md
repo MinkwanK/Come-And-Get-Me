@@ -37,8 +37,9 @@
 
 
 ### 신도 NPC 
-
-  > 신도에게 Hearing Sense 부여 -> Player의 소리 인지시 소리가 난 Location 갱신 -> 소리가 난 TargetLocation으로 이동
+  - Sight Sense 부여
+  - Hearing Sense 부여
+  >  Player의 소리 인지시 소리가 난 Location 갱신 -> 소리가 난 TargetLocation으로 이동
   > 특정 소리마다 다른 ManRange 값을 부여하여, 자연스러운 소리 인지를 구현
   - ~~신도에게 순찰 구현~~
   - 신도는 Player을 찾기 위해 집을 순찰하며 수색해야 한다. <br>
