@@ -3,22 +3,55 @@
 
 #include "MyPlayerController.h"
 
-#include "InGameUI.h"
+
 #include "RestartWidget.h"
 #include "MainMenu.h"
 #include "ScaryGameOver.h"
+#include "CrossHairWidget.h"
+#include "ItemWidget.h"
+#include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 
 
-void AMyPlayerController::ShowInGameUI()
+
+void AMyPlayerController::ShowCrossHair()
 {
-	if(BP_InGameUI != nullptr)
+	if(BP_CrossHairWidget != nullptr)
 	{
-		InGameUI = CreateWidget<UInGameUI>(this,BP_InGameUI);
-		InGameUI->AddToViewport();
-		
+		CrossHairWidget = CreateWidget<UCrossHairWidget>(this,BP_CrossHairWidget);
+		CrossHairWidget->AddToViewport();
 	}
 }
+
+void AMyPlayerController::HideCrossHair()
+{
+	CrossHairWidget->RemoveFromParent();
+	CrossHairWidget->Destruct();
+}
+
+void AMyPlayerController::ShowItemWidget(AActor* Actor)
+{
+	if(BP_ItemWidget != nullptr)
+	{
+		if(Actor != nullptr)
+		{
+			ItemWidget = CreateWidget<UItemWidget>(this,BP_ItemWidget);
+			ItemWidget->AddToViewport();
+		}
+	}
+}
+
+void AMyPlayerController::HideItemWidget()
+{
+	if(BP_ItemWidget!=nullptr)
+	{
+		UE_LOG(LogTemp,Log,TEXT("HideItemWidget 2 "))
+		ItemWidget->RemoveFromParent();
+		ItemWidget->Destruct();
+	}
+}
+
+
 
 
 
@@ -26,8 +59,6 @@ void AMyPlayerController::ShowRestartWidget()
 {
 	if(BP_RestartWidget != nullptr)
 	{
-		InGameUI->RemoveFromParent();
-		InGameUI->Destruct();
 		SetPause(true);
 		SetInputMode(FInputModeUIOnly());
 		bShowMouseCursor = true;

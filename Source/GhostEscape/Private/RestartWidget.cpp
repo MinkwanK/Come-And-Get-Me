@@ -14,6 +14,7 @@ void URestartWidget::OnRestartClicked()
 	if(PlayerController!=nullptr)
 	{
 		PlayerController->HideRestartWidget();
+		PlayerController->ShowCrossHair();
 	}
 }
 

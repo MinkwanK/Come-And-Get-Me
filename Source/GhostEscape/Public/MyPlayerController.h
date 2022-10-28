@@ -22,9 +22,13 @@ class GHOSTESCAPE_API AMyPlayerController : public APlayerController
 	
 	UPROPERTY()
 	class UScaryGameOver* ScaryGameOverWidget;
-	
+
 	UPROPERTY()
-	class UInGameUI* InGameUI;
+	class UCrossHairWidget* CrossHairWidget;
+
+	UPROPERTY()
+	class UItemWidget* ItemWidget;
+
 	
 public:
 	
@@ -37,11 +41,18 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UScaryGameOver> BP_ScaryGameOver;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UCrossHairWidget>BP_CrossHairWidget;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UItemWidget>BP_ItemWidget;
+	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	TObjectPtr<USoundBase> GameOverScarySound;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<class UInGameUI> BP_InGameUI;
+	
+
+
 
 
 
@@ -54,8 +65,11 @@ public:
 	void ShowScaryGameOverWidget();
 	void HideScaryGameOverWidget();
 
-	void ShowInGameUI();
-	void HideInGameUI();
+	void ShowCrossHair();
+	void HideCrossHair();
+
+	void ShowItemWidget(AActor* Actor);
+	void HideItemWidget();
 
 	
 	

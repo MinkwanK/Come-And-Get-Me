@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyCharacter.h"
 #include "MyCivilian.h"
+#include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -76,7 +77,6 @@ void AMyCivilianController::OnTargetPerception(AActor* Actor, FAIStimulus Stimul
 {
 	AMyCharacter* Player = Cast<AMyCharacter>(Actor);
 	AMyCivilian* Civilian = Cast<AMyCivilian>(GetPawn());
-	//UHorrorScoreComponent* HorrorComp = Player->FindComponentByClass<UHorrorScoreComponent>();
 	UHealthComponent* HealthComp = Civilian->FindComponentByClass<UHealthComponent>(); //접근 원하는 컴포넌트의 클래스를 알려줌
 	if(Player == nullptr)
 	{
@@ -125,7 +125,7 @@ void AMyCivilianController::OnTargetPerception(AActor* Actor, FAIStimulus Stimul
 				{
 					FirstGotDamage = true;
 					HealthComp->LoseHealth(30,Civilian);
-					//HorrorComp->getHorrorScore(30);
+		
 					
 				}
 			}
@@ -135,7 +135,7 @@ void AMyCivilianController::OnTargetPerception(AActor* Actor, FAIStimulus Stimul
 				{
 					FirstGotDamage = true;
 					HealthComp->LoseHealth(50,Civilian);
-					//HorrorComp->getHorrorScore(50);
+
 				
 				}
 			}

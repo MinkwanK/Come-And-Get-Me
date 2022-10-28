@@ -39,14 +39,7 @@ AMyCharacter::AMyCharacter()
 	PlayerLightComp->SetIntensity(0.0f);
 	PlayerLightComp->AttenuationRadius = 500.0f;
 
-	/*
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetRelativeLocation(FVector(30.0f,0.0f,BaseEyeHeight));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300;
-	CameraBoom->bUsePawnControlRotation = true;
-	*/
-	//FName CameraSocket(TEXT("head"));
+	
 	FPS_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_Camera"));
 	FPS_Camera->SetupAttachment(GetMesh(),TEXT("head"));
 	FPS_Camera->bUsePawnControlRotation = true;
@@ -57,7 +50,7 @@ AMyCharacter::AMyCharacter()
 	AIPerceptionStimuliSourceComp->RegisterForSense(Sight);
 	AIPerceptionStimuliSourceComp->RegisterForSense(Hearing);
 
-	HorrorScoreComp = CreateDefaultSubobject<UHorrorScoreComponent>(TEXT("HorrorScoreComp"));
+
 	
 	
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
@@ -66,9 +59,10 @@ AMyCharacter::AMyCharacter()
 	bDead = false;
 	bLight = false;
 	State = 0;
-
+	bShowItemWidget = false;
 	GameOverScaryWidgetTimer = 3;
 	MaxMovementNoiseRange = 100.0f; //Max Noise Range when Walking
+	
 	
 }
 
@@ -77,21 +71,18 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	FString levelname = UGameplayStatics::GetCurrentLevelName(this);
+	AMyPlayerController* MyPlayerController =  Cast<AMyPlayerController>(this->Controller);
+	if(levelname == "StartMap")
+	{
+		
+		MyPlayerController->ShowMainMenuWidget();
+	}
+	else if(levelname == "TestMap")
+	{
+		MyPlayerController->ShowCrossHair();
+	}
 
-	// 첫 시작 Start Map 용
-	/*
-	if(levelname == FString("StartMap"))
-	{
-		UE_LOG(LogTemp,Log,TEXT("StartMap"));
-		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
-		PlayerController->ShowMainMenuWidget();
-	}
-	else
-	{
-		AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetController());
-		PlayerController->HideMainMenuWidget();
-	}
-	*/
+
 	
 }
 
@@ -100,6 +91,54 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//라인트레이스 결과 저장 변수
+	FHitResult Hit; 
+
+	//라인트레이스 시작 벡터 변수
+	FVector Start = FPS_Camera->GetComponentLocation();
+	//라인트레이스 도착 벡터 변수
+	FVector End = Start +FPS_Camera->GetForwardVector()*125.0f;
+
+
+	ECollisionChannel Channel = ECollisionChannel::ECC_Visibility;
+	FCollisionQueryParams QueryParams;
+	//Player를 라인트레이스 충돌에서 제외
+	QueryParams.AddIgnoredActor(this);
+	
+	//라인트레이스 발사
+	GetWorld()->LineTraceSingleByChannel(Hit,Start,End,Channel,QueryParams);
+	//라인트레이스 발사 선 표시
+	DrawDebugLine(GetWorld(),Start,End,FColor::Green);
+
+	if(Hit.GetActor() != nullptr)
+	{
+		if(Hit.GetActor()->ActorHasTag("Weapon"))
+		{
+			AMyPlayerController* MyPlayerController =  Cast<AMyPlayerController>(this->Controller);
+			
+			if(MyPlayerController && bShowItemWidget != true)
+			{
+				UE_LOG(LogTemp,Log,TEXT("ShowItemWidget"));
+				MyPlayerController->ShowItemWidget(Hit.GetActor());
+				bShowItemWidget = true;
+			}
+		}
+	}
+	else
+	{
+		AMyPlayerController* MyPlayerController =  Cast<AMyPlayerController>(this->Controller);
+		
+		if(MyPlayerController && bShowItemWidget == true)
+		{
+			UE_LOG(LogTemp,Log,TEXT("HideItemWidget"));
+			MyPlayerController->HideItemWidget();
+			bShowItemWidget = false;
+		}
+	}
+
+
+		
+	
 	
 
 }
@@ -116,6 +155,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Crouch",IE_Released,this,&AMyCharacter::ActiveCrouch);
 	PlayerInputComponent->BindAction("Attack",IE_Pressed,this,&AMyCharacter::Attack);
 	PlayerInputComponent->BindAction("Light",IE_Pressed,this,&AMyCharacter::LightOn);
+	PlayerInputComponent->BindAction("Interact",IE_Pressed,this,&AMyCharacter::Interact);
 
 
 	PlayerInputComponent->BindAxis("Move Right",this,&AMyCharacter::MoveRight);
@@ -165,20 +205,32 @@ void AMyCharacter::Attack()
 {
 		State = 1;
 	
-		FHitResult Hit; //라인트레이스 결과 저장
+		//라인트레이스 결과 저장 변수
+		FHitResult Hit; 
 
+		//라인트레이스 시작 벡터 변수
 		FVector Start = FPS_Camera->GetComponentLocation();
+		//라인트레이스 도착 벡터 변수
 		FVector End = Start +FPS_Camera->GetForwardVector()*1500.0f;
-		//FVector End = Start + Start.ForwardVector * 1500.0f;
+
 
 		ECollisionChannel Channel = ECollisionChannel::ECC_Visibility;
 		FCollisionQueryParams QueryParams;
+		//Player를 라인트레이스 충돌에서 제외
 		QueryParams.AddIgnoredActor(this);
-
-		GetWorld()->LineTraceSingleByChannel(Hit,Start,End,Channel,QueryParams);
-
-		DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,3);
 	
+		//라인트레이스 발사
+		GetWorld()->LineTraceSingleByChannel(Hit,Start,End,Channel,QueryParams);
+		//라인트레이스 발사 선 표시
+		DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,3);
+}
+
+void AMyCharacter::Interact()
+{
+	
+}
+
+
 		//UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
 		//MakeNoise(1,this,GetActorLocation(),1000.0f,"AttackNoise");
 		/*
@@ -191,7 +243,7 @@ void AMyCharacter::Attack()
 	
 	
 	
-}
+
 
 
 

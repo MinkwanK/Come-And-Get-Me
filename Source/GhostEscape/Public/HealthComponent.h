@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MyCivilian.h"
-#include "HorrorScoreComponent.h"
+
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 

@@ -31,13 +31,18 @@ EBTNodeResult::Type UBTTargetPointSelection::ExecuteTask(UBehaviorTreeComponent&
 		
 		do
 		{
-			
+			//랜덤 타겟 포인트 정하기
 			RandomIndex = FMath::RandRange(0,AvailableTargetPoints.Num()-1);
 			NextTargetPoint = Cast<ABotTargetPoint>(AvailableTargetPoints[RandomIndex]);
+
+			//이미 직전에 방문했다면, 다시 정하기
 			if(NextTargetPoint->VisitedCnt == 1)
 				continue;
+
+			//직전에 방문하지 않은 타겟 포인트라면 방문 표시
 			NextTargetPoint->VisitedCnt = 1; 
 		}
+		//새로운 타겟 포인트를 찾을 때 까지
 		while (CurrentPoint == NextTargetPoint);
 
 		BlackboardComp->SetValueAsObject("LocationToGo", NextTargetPoint);

@@ -2,12 +2,20 @@
 
 
 #include "MainMenu.h"
+
+#include "MyPlayerController.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 
 void UMainMenu::OnStartButtonClicked()
 {
 	UGameplayStatics::OpenLevel(this,FName("TestMap"));
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetOwningPlayer());
+
+	if(PlayerController!=nullptr)
+	{
+		PlayerController->HideMainMenuWidget();
+	}
 
 }
 

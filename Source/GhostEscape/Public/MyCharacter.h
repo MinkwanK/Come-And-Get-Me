@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "HorrorScoreComponent.h"
-#include "MyCivilian.h"
+
+
 #include "Camera/CameraComponent.h"
 #include "Components/PointLightComponent.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/SpringArmComponent.h"
+
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
@@ -70,13 +70,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UHorrorScoreComponent> HorrorScoreComp;
+
 
 	void LightOn();
 	void Attack();
 	void Run();
 	void StopRun();
+	void Interact();
 	
 	UFUNCTION()
 	void ActiveCrouch();
@@ -91,15 +91,14 @@ private:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "MyFPS_Cam", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FPS_Camera;
 
-	//UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category=  "MyFps_Cam",meta = (AllowPrivateAccess = "true"))
-	//TObjectPtr<USpringArmComponent> CameraBoom;
+
 
 	
 
 
 	bool bDead;
 	bool bLight;
-
+	bool bShowItemWidget = false;
 
 	void PlayerDead();
 	

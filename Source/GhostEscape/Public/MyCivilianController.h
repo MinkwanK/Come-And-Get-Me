@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "NPCExitTargetPoint.h"
+
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackBoardComponent.h"
@@ -12,8 +12,7 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Hearing.h"
-#include "HealthComponent.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
+
 #include "MyCivilianController.generated.h"
 
 /**

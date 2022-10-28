@@ -88,37 +88,46 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 
 
 
-
+//적이 Actor를 인지했을 때
 void AEnemyAIController::OnTargetPerception(AActor* Actor, FAIStimulus Stimuls)
 {
+	//매개변수로 받은 Actor를 Player로 형 변환
 	AMyCharacter* Player = Cast<AMyCharacter>(Actor);
+	//인지된 Actor가 Player가 아니라면
 	if(Player == nullptr)
 	{
 		UE_LOG(LogTemp,Log,TEXT("Target percetion failed"));
+		//AIController가 소유한 Pawn을 AMyEnemy로 형 변환
 		AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn());
+		//Player가 인지되지 않으면 속도를 내린다.
 		Enemy->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 		
-		bCanSeeTarget = false;
 		return; 
 	}
 	else 
-	{   //플레이어를 볼때마다 호출된다.
+	{   //Player를 인지할 때마다 호출
 		UE_LOG(LogTemp,Log,TEXT("Target percetion success"));
-		if(Stimuls.Tag == "Noise")
+		//인지된 자극의 Tag가 Noise 라면 -> 인지된 자극이 Player의 소리
+		if(Stimuls.Tag == "Noise") 
 		{
-			BlackboardComponent->SetValueAsVector("TargetLocation",Player->GetActorLocation()); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
+			//인지된 자극이 소리일 때, 블랙보드 키 값에 소리의 위치를 갱신
+			BlackboardComponent->SetValueAsVector("TargetLocation",Player->GetActorLocation()); 
 		}
 		else
 		{
-			BlackboardComponent->SetValueAsObject("TargetPlayer",Player); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
+			//인지된 자극이 소리가 아니라면, 블랙보드 키 값에 Player Object를 갱신
+			BlackboardComponent->SetValueAsObject("TargetPlayer",Player); 
 		}
-		AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn());
+		//AIController가 소유한 Pawn 들고오기
+		AMyEnemy* Enemy = Cast<AMyEnemy>(GetPawn()); 
 		if(Enemy)
 		{
+			//Player를 인지 했으므로, Enemy의 속도를 높인다.
 			Enemy->GetCharacterMovement()->MaxWalkSpeed = 550.0f;
 			
-			
+			//목표 상실 시간
 			TargetLossCnt  = 3;
+			//목표 상실 타이머 시작
 			GetWorldTimerManager().ClearTimer(TargetLossTimerHandle);
 			GetWorldTimerManager().SetTimer(TargetLossTimerHandle,this,&AEnemyAIController::TargetLoss,1.0f,true);  
 		}

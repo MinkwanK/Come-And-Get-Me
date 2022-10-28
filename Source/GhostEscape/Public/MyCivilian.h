@@ -3,10 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NPCExitTargetPoint.h"
 #include "GameFramework/Character.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
-#include "Perception/AISense_Sight.h"
 #include "MyCivilian.generated.h"
 
 UCLASS()
