@@ -3,6 +3,7 @@
 
 #include "GhostEscape/Public/MyCharacter.h"
 
+#include "ItemWidget.h"
 #include "MyCivilian.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -10,8 +11,7 @@
 #include "MyPlayerController.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Perception/AIPerceptionComponent.h"
-#include "Perception/AISenseConfig_Sight.h"
+
 
 
 // Sets default values
@@ -34,16 +34,17 @@ AMyCharacter::AMyCharacter()
 	
 	
 	
-	PlayerLightComp = CreateDefaultSubobject<UPointLightComponent>(TEXT("PlayerLightComponent"));
-	PlayerLightComp->SetupAttachment(GetMesh(),"LightSocket");
-	PlayerLightComp->SetIntensity(0.0f);
-	PlayerLightComp->AttenuationRadius = 500.0f;
+	
+
 
 	
 	FPS_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_Camera"));
 	FPS_Camera->SetupAttachment(GetMesh(),TEXT("head"));
 	FPS_Camera->bUsePawnControlRotation = true;
-	
+
+	PlayerLightComp = CreateDefaultSubobject<USpotLightComponent>(TEXT("PlayerLightComponent"));
+	PlayerLightComp->SetupAttachment(FPS_Camera);
+	PlayerLightComp->SetIntensity(0.0f);
 
 	NoiseEmitterComp = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitterComponent"));
 	
@@ -118,7 +119,7 @@ void AMyCharacter::Tick(float DeltaTime)
 			
 			if(MyPlayerController && bShowItemWidget != true)
 			{
-				UE_LOG(LogTemp,Log,TEXT("ShowItemWidget"));
+			
 				MyPlayerController->ShowItemWidget(Hit.GetActor());
 				bShowItemWidget = true;
 			}
@@ -130,7 +131,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		
 		if(MyPlayerController && bShowItemWidget == true)
 		{
-			UE_LOG(LogTemp,Log,TEXT("HideItemWidget"));
+			//UE_LOG(LogTemp,Log,TEXT("HideItemWidget"));
 			MyPlayerController->HideItemWidget();
 			bShowItemWidget = false;
 		}
@@ -287,7 +288,7 @@ void AMyCharacter::LightOn()
 	else
 	{
 		UE_LOG(LogTemp,Log,TEXT("Light ON"));
-		PlayerLightComp->SetIntensity(800.0f);
+		PlayerLightComp->SetIntensity(500.0f);
 		bLight = true;
 	}
 

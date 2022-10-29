@@ -13,9 +13,14 @@ UCLASS()
 class GHOSTESCAPE_API UItemWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+	public:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ItemTxt;
+	
+	//virtual void NativeOnInitialized() override;
+
+
 
 	
 

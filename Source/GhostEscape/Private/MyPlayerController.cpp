@@ -35,7 +35,9 @@ void AMyPlayerController::ShowItemWidget(AActor* Actor)
 	{
 		if(Actor != nullptr)
 		{
+			
 			ItemWidget = CreateWidget<UItemWidget>(this,BP_ItemWidget);
+			ItemWidget->ItemTxt->SetText(FText::FromString(Actor->GetActorNameOrLabel()));
 			ItemWidget->AddToViewport();
 		}
 	}
@@ -45,7 +47,7 @@ void AMyPlayerController::HideItemWidget()
 {
 	if(BP_ItemWidget!=nullptr)
 	{
-		UE_LOG(LogTemp,Log,TEXT("HideItemWidget 2 "))
+	
 		ItemWidget->RemoveFromParent();
 		ItemWidget->Destruct();
 	}

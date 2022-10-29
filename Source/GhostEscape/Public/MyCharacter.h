@@ -6,7 +6,7 @@
 
 
 #include "Camera/CameraComponent.h"
-#include "Components/PointLightComponent.h"
+#include "Components/SpotLightComponent.h"
 #include "GameFramework/Character.h"
 
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
@@ -28,10 +28,12 @@ public:
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> AIPerceptionStimuliSourceComp;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite);
-	TObjectPtr<UPointLightComponent> PlayerLightComp;
+	TObjectPtr<USpotLightComponent> PlayerLightComp;
 
 	UPROPERTY(VisibleAnywhere);
 	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitterComp;
+	
+
 
 	//UClass에 안전성을 추가한 것이다.
 	TSubclassOf<UAISense_Sight> Sight;
