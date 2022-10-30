@@ -21,6 +21,7 @@
  - ~~걷기~~
  - ~~뛰기(Shift)~~
  - 손전등 (F 키)
+ > SpotLightComponent를 FPS 카메라에 부착. Player가 바라보는 시점에 따라 카메라가 돌아간다.
  
  
  ### Player의 시점
