@@ -82,6 +82,8 @@ AIController 소스파일에 AIPerception Component를 생성하면, 그 AIC를 
 
 시야와 청각 두개를 동시에 쓸 때, Dominant Senese를 null로 
 
+애니메이션 몽타주가 제대로 재생이 되지 않을때, Blend Option에 Blend in과 Blend out을 0.0으로 
+
 ## 피드백
 0.1v
 손전등이 있으면 좋겠다.
