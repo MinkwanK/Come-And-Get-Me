@@ -22,6 +22,7 @@
  - ~~뛰기(Shift)~~
  - 손전등 (F 키)
  > SpotLightComponent를 FPS 카메라에 부착. Player가 바라보는 시점에 따라 카메라가 돌아간다.
+ > Player의 상태를 나태는 열거형 enum 적용
  
  
  ### Player의 시점
@@ -30,7 +31,8 @@
 
 ### Player 아이템 시스템
 - 무기 장착
-- 
+- 무기 AimOffset 적용
+
  
  ### Player의 체력
  - 체력 구현
