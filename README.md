@@ -30,8 +30,8 @@
 > Player Mesh의 Head에 소켓을 추가하여, Camera 를 부착
 
 ### Player 아이템 시스템
-- 무기 장착
-- 무기 AimOffset 적용
+- 권총 장착
+- ~~권총 AimOffset 적용 ~~
 
  
  ### Player의 체력
