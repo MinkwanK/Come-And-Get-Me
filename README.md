@@ -20,18 +20,25 @@
  - ~~앉기~~ (Left Ctrl)
  - ~~걷기~~
  - ~~뛰기(Shift)~~
- - 손전등 (F 키)
+ - ~~손전등 (F 키)~~
  > SpotLightComponent를 FPS 카메라에 부착. Player가 바라보는 시점에 따라 카메라가 돌아간다.
  > Player의 상태를 나태는 열거형 enum 적용
  
  
  ### Player의 시점
-- FPS 카메라
+- ~~FPS 카메라~~
 > Player Mesh의 Head에 소켓을 추가하여, Camera 를 부착
 
 ### Player 아이템 시스템
-- 권총 장착
+- ~~권총 장착~~
+> 권총 아이템을 획득하면 총 메시 숨겨진 것 보이게 하기. Aim이 가능하게 만들기
 - ~~권총 Aim Offset 적용~~
+
+- ~~ItemSystem 컴포넌트 생성~~
+> 총기 변수와 열쇠 변수등을 생성하고 컴포넌트를 플레이어에게 부착
+> 아이템 획득 시 변수의 값을 바꿈
+
+
 
  
  ### Player의 체력
