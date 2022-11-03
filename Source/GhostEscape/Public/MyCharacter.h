@@ -14,6 +14,14 @@
 #include "Perception/AISense_Sight.h"
 #include "MyCharacter.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EPlayerState : uint8
+{
+	IDLE UMETA(DisplayName = "IDLE"),
+	AIM UMETA(DisplayName = "AIM"),
+};
+
 UCLASS()
 class GHOSTESCAPE_API AMyCharacter : public ACharacter
 {
@@ -22,6 +30,9 @@ class GHOSTESCAPE_API AMyCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMyCharacter();
+
+
+	// 0 : 기본상태  1: 공격상태  2: 에임
 	
 
 	UPROPERTY(VisibleAnywhere)
@@ -32,6 +43,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere);
 	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitterComp;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<UAnimMontage> AimMontage;
 	
 
 
@@ -41,6 +55,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	TObjectPtr<USoundBase> AttackSound;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	EPlayerState PlayerStateEnum;
 	
 	class UAISenseConfig_Sight* SenseSight;
 	
@@ -56,6 +73,8 @@ public:
 	float MaxMovementNoiseRange;
 
 	bool bCanSeeCivilian;
+
+	bool bDetectItem;
 
 	
 	void AttackTimeLoss();
@@ -79,6 +98,8 @@ protected:
 	void Run();
 	void StopRun();
 	void Interact();
+	void Aim();
+	void NotAim();
 	
 	UFUNCTION()
 	void ActiveCrouch();
@@ -86,8 +107,7 @@ protected:
 	void MoveRight(float Value);
 	void MoveForward(float Value);
 
-	int State; //캐릭터의 현재 상태
-	// 0 : 기본상태  1: 공격상태  2 : 걷기 상태 3 : 뛰기 상태
+	
 	
 private:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "MyFPS_Cam", meta = (AllowPrivateAccess = "true"))
@@ -119,5 +139,7 @@ public:
 	
 	
 	void GameOverScaryWidget_TimeLoss();
+
+	
 
 };

@@ -56,11 +56,12 @@ AMyCharacter::AMyCharacter()
 	
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0;
 	this->SetHidden(false);
-	
+
+	PlayerStateEnum = EPlayerState::IDLE;
 	bDead = false;
 	bLight = false;
-	State = 0;
 	bShowItemWidget = false;
+	bDetectItem = false;
 	GameOverScaryWidgetTimer = 3;
 	MaxMovementNoiseRange = 100.0f; //Max Noise Range when Walking
 	
@@ -121,6 +122,7 @@ void AMyCharacter::Tick(float DeltaTime)
 			{
 			
 				MyPlayerController->ShowItemWidget(Hit.GetActor());
+				bDetectItem = true;
 				bShowItemWidget = true;
 			}
 		}
@@ -133,6 +135,7 @@ void AMyCharacter::Tick(float DeltaTime)
 		{
 			//UE_LOG(LogTemp,Log,TEXT("HideItemWidget"));
 			MyPlayerController->HideItemWidget();
+			bDetectItem = false;
 			bShowItemWidget = false;
 		}
 	}
@@ -157,6 +160,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Attack",IE_Pressed,this,&AMyCharacter::Attack);
 	PlayerInputComponent->BindAction("Light",IE_Pressed,this,&AMyCharacter::LightOn);
 	PlayerInputComponent->BindAction("Interact",IE_Pressed,this,&AMyCharacter::Interact);
+	PlayerInputComponent->BindAction("Aim",IE_Pressed,this,&AMyCharacter::Aim);
+	PlayerInputComponent->BindAction("Aim",IE_Released,this,&AMyCharacter::NotAim);
 
 
 	PlayerInputComponent->BindAxis("Move Right",this,&AMyCharacter::MoveRight);
@@ -196,6 +201,22 @@ void AMyCharacter::MoveForward(float Value)
 	}
 }
 
+void AMyCharacter::Aim()
+{
+
+	
+	//PlayAnimMontage(AimMontage,1.0,NAME_None);
+
+	PlayerStateEnum = EPlayerState::AIM;
+	
+}
+
+void AMyCharacter::NotAim()
+{
+	PlayerStateEnum = EPlayerState::IDLE;
+
+	//StopAnimMontage(AimMontage);
+}
 
 
 
@@ -204,31 +225,37 @@ void AMyCharacter::MoveForward(float Value)
 
 void AMyCharacter::Attack()
 {
-		State = 1;
+		if(PlayerStateEnum == EPlayerState::AIM)
+		{
+			//라인트레이스 결과 저장 변수
+			FHitResult Hit; 
+
+			//라인트레이스 시작 벡터 변수
+			FVector Start = FPS_Camera->GetComponentLocation();
+			//라인트레이스 도착 벡터 변수
+			FVector End = Start +FPS_Camera->GetForwardVector()*1500.0f;
+
+
+			ECollisionChannel Channel = ECollisionChannel::ECC_Visibility;
+			FCollisionQueryParams QueryParams;
+			//Player를 라인트레이스 충돌에서 제외
+			QueryParams.AddIgnoredActor(this);
 	
-		//라인트레이스 결과 저장 변수
-		FHitResult Hit; 
+			//라인트레이스 발사
+			GetWorld()->LineTraceSingleByChannel(Hit,Start,End,Channel,QueryParams);
+			//라인트레이스 발사 선 표시
+			DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,3);
 
-		//라인트레이스 시작 벡터 변수
-		FVector Start = FPS_Camera->GetComponentLocation();
-		//라인트레이스 도착 벡터 변수
-		FVector End = Start +FPS_Camera->GetForwardVector()*1500.0f;
-
-
-		ECollisionChannel Channel = ECollisionChannel::ECC_Visibility;
-		FCollisionQueryParams QueryParams;
-		//Player를 라인트레이스 충돌에서 제외
-		QueryParams.AddIgnoredActor(this);
-	
-		//라인트레이스 발사
-		GetWorld()->LineTraceSingleByChannel(Hit,Start,End,Channel,QueryParams);
-		//라인트레이스 발사 선 표시
-		DrawDebugLine(GetWorld(),Start,End,FColor::Red,false,3);
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(),AttackSound,GetActorLocation());
+		}
 }
 
 void AMyCharacter::Interact()
 {
-	
+	if(bDetectItem == true)
+	{
+		
+	}
 }
 
 
