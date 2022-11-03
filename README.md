@@ -31,7 +31,7 @@
 
 ### Player 아이템 시스템
 - 권총 장착
-- ~~권총 AimOffset 적용 ~~
+- ~~권총 Aim Offset 적용~~
 
  
  ### Player의 체력
