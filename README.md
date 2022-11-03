@@ -14,19 +14,24 @@
              기자는 총 및 근접무기를 이용하여 전투를 할 수 있다.
 
 ## 구현목표
-### 귀신의 움직임 구현 
+### Player 조작
  - ~~상하좌우 이동~~
  - ~~점프~~
  - ~~앉기~~ (Left Ctrl)
  - ~~걷기~~
  - ~~뛰기(Shift)~~
  - 손전등 (F 키)
+ > SpotLightComponent를 FPS 카메라에 부착. Player가 바라보는 시점에 따라 카메라가 돌아간다.
+ > Player의 상태를 나태는 열거형 enum 적용
  
  
  ### Player의 시점
 - FPS 카메라
 > Player Mesh의 Head에 소켓을 추가하여, Camera 를 부착
 
+### Player 아이템 시스템
+- 권총 장착
+- ~~권총 AimOffset 적용 ~~
 
  
  ### Player의 체력
@@ -78,6 +83,10 @@ AIController 소스파일에 AIPerception Component를 생성하면, 그 AIC를 
 소리를 낼려면 emittercomponent 가 필요하다. float volume 만큼의 make noise 사용 
 
 시야와 청각 두개를 동시에 쓸 때, Dominant Senese를 null로 
+
+애니메이션 몽타주가 제대로 재생이 되지 않을때, Blend Option에 Blend in과 Blend out을 0.0으로 
+Blend Time이란 Pose A에서 Pose B로 바꾸는 시간
+
 
 ## 피드백
 0.1v
