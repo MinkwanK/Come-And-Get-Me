@@ -39,11 +39,21 @@
 > 아이템 획득 시 변수의 값을 바꿈
 
 
+### Player의 공격
+- ~~사격~~
+> 라인트레이스를 쏘아 맞은 Actor가 Enemy라면 Damage 주기
+> 사운드 추가, Effect 추가
 
  
  ### Player의 체력
  - 체력 구현
  
+ ### 신도의 체력
+ - ~~HealthComponent 부착~~
+ > 체력이 0 이하로 떨어질 시 Controller를 파괴하고 PhysicsSimulate 동작 
+ > 피격 시 피격 이펙트 발생 (출혈)
+
+
  ### 신도의 Player 공격
  - 추가 예정
 
