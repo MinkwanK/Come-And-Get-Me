@@ -6,7 +6,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MyCharacter.h"
 #include "MyCivilian.h"
-#include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -77,7 +76,7 @@ void AMyCivilianController::OnTargetPerception(AActor* Actor, FAIStimulus Stimul
 {
 	AMyCharacter* Player = Cast<AMyCharacter>(Actor);
 	AMyCivilian* Civilian = Cast<AMyCivilian>(GetPawn());
-	UHealthComponent* HealthComp = Civilian->FindComponentByClass<UHealthComponent>(); //접근 원하는 컴포넌트의 클래스를 알려줌
+
 	if(Player == nullptr)
 	{
 		//UE_LOG(LogTemp,Log,TEXT("Target percetion failed"));
@@ -103,13 +102,7 @@ void AMyCivilianController::OnTargetPerception(AActor* Actor, FAIStimulus Stimul
 		if(Stimulus.Tag == "AttackNoise") //플레이어의 공격
 		{
 			Civilian->state[1] = true; //0 평시 1 소리듣기 2 적 발견
-			if(HealthComp != nullptr)
-			{
-				FirstGotDamage = true;
-				HealthComp->LoseHealth(50,Civilian);
-				//HorrorComp->getHorrorScore(50);
-				
-			}
+			
 			BlackboardComponent->SetValueAsBool("CanHear",true); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트
 			BlackboardComponent->SetValueAsVector("TargetSoundLocation",Player->GetActorLocation());
 			GetWorldTimerManager().ClearTimer(TargetLossTimerHandle);
@@ -119,26 +112,8 @@ void AMyCivilianController::OnTargetPerception(AActor* Actor, FAIStimulus Stimul
 		{
 			Civilian->state[2]=true;
 			Civilian->CanSeePlayer = true;
-			if(Civilian->state[1] == true && Civilian->state[2] == true) //소리도 들렸고, 모습도 보였으면
-			{
-				if(HealthComp != nullptr && FirstGotDamage == false)
-				{
-					FirstGotDamage = true;
-					HealthComp->LoseHealth(30,Civilian);
-		
-					
-				}
-			}
-			else if(Civilian->state[1] == false && Civilian->state[2] == true) //모습만 보이면
-			{
-				if(HealthComp!=nullptr && FirstGotDamage == false)
-				{
-					FirstGotDamage = true;
-					HealthComp->LoseHealth(50,Civilian);
 
-				
-				}
-			}
+			BlackboardComponent->SetValueAsObject("TargetPlayer",Player);
 			//UE_LOG(LogTemp,Log,TEXT("Player percetion success"));
 			Civilian->GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 			BlackboardComponent->SetValueAsBool("CanSeePlayer",true); //인지된 액터가 플레이어면 키 값에 플레이어 업데이트

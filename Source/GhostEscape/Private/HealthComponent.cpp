@@ -3,9 +3,6 @@
 
 #include "HealthComponent.h"
 
-#include "GameFramework/CharacterMovementComponent.h"
-
-
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
 {
@@ -13,7 +10,9 @@ UHealthComponent::UHealthComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
+	HP = 100;
+
+	
 }
 
 
@@ -35,19 +34,7 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-void UHealthComponent::LoseHealth(int amount,AMyCivilian* Civilian)
+void UHealthComponent::LoseHealth(int Amount)
 {
-	
-	Health-=amount;
-	UE_LOG(LogTemp,Log,TEXT("%d"),Health);
-	
-	if(Health<=0)
-	{
-		UE_LOG(LogTemp,Log,TEXT("Dead"));
-		Civilian->GetController()->Destroy();
-		Civilian->GetCharacterMovement()->DisableMovement();
-		Civilian->GetMesh()->SetSimulatePhysics(true);
-		Health = 0;
-	}
+	HP -= Amount;
 }
-

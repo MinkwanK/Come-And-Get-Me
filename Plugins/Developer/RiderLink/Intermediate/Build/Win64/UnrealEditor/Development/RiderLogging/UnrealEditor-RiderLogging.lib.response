@@ -7,5 +7,6 @@
 /IGNORE:4221
 /NODEFAULTLIB
 "D:\UnrealProject\GhostEscape\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Module.RiderLogging.cpp.obj"
+"D:\UnrealProject\GhostEscape\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\RiderLogging.cpp.obj"
 "D:\UnrealProject\GhostEscape\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\Default.rc2.res"
 /OUT:"D:\UnrealProject\GhostEscape\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLogging\UnrealEditor-RiderLogging.lib"

@@ -9,7 +9,7 @@
 
 void UMainMenu::OnStartButtonClicked()
 {
-	UGameplayStatics::OpenLevel(this,FName("TestMap"));
+	UGameplayStatics::OpenLevel(this,FName("Stage1"));
 	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(GetOwningPlayer());
 
 	if(PlayerController!=nullptr)

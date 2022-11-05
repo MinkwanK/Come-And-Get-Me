@@ -13,7 +13,7 @@ AMyEnemy::AMyEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	
+	HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComp"));
 	this->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 	EnemyLaughTime = 5;
 
@@ -31,7 +31,7 @@ void AMyEnemy::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation
 void AMyEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	EnemyStateEnum = EEnemyState::IDLE;
 
 	GetWorldTimerManager().SetTimer(LaughTimerHandle,this,&AMyEnemy::EnemyLaugh,1.0f,true);
 	
@@ -41,6 +41,7 @@ void AMyEnemy::BeginPlay()
 void AMyEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 
 }
 
@@ -59,5 +60,15 @@ void AMyEnemy::EnemyLaugh()
 		UGameplayStatics::PlaySoundAtLocation(this,LaughSound,GetActorLocation());
 		EnemyLaughTime = 5;
 	}
+}
+
+void AMyEnemy::Dead()
+{
+	EnemyStateEnum = EEnemyState::Dead;
+	this->Controller->Destroy();
+	this->GetMesh()->SetSimulatePhysics(true);
+	this->GetCharacterMovement()->DisableMovement();
+	//this->GetCharacterMovement()->DisableMovement();
+	
 }
 

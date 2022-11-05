@@ -17,14 +17,19 @@ public:
 	// Sets default values for this component's properties
 	UItemSystem();
 
+	bool Pistol;
+	bool Rifle;
+	bool BookStack;
+	int PistolAmmo;
+	
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
+	
+	
 private:
-	bool Pistol;
-	bool Rifle;
-	int PistolAmmo;
+
 
 	
 

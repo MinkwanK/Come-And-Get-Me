@@ -8,7 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "GameFramework/Character.h"
-
+#include <ItemSystem.h>
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Hearing.h"
 #include "Perception/AISense_Sight.h"
@@ -45,9 +45,9 @@ public:
 	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitterComp;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
-	TObjectPtr<UAnimMontage> AimMontage;
+	TObjectPtr<UAnimMontage> Equip_Pistol_Montage;
 	
-
+	
 
 	//UClass에 안전성을 추가한 것이다.
 	TSubclassOf<UAISense_Sight> Sight;
@@ -55,6 +55,17 @@ public:
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	TObjectPtr<USoundBase> AttackSound;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> PistolRaiseSound;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> PickBookStack;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	TObjectPtr<USoundBase> ScarySound;
+
+
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	EPlayerState PlayerStateEnum;
@@ -64,9 +75,11 @@ public:
 	FTimerHandle GameOverScaryWidget_TimerHandle;
 	FTimerHandle AttackTimerHandle;
 	FTimerHandle TargetFoundTimerHandle;
+	FTimerHandle EndTimerHandle;
 
 	int AttackTime;
 	int TargetFoundTime;
+	int EndTimer;
 	
 	int GameOverScaryWidgetTimer;
 
@@ -74,13 +87,18 @@ public:
 
 	bool bCanSeeCivilian;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bCanAim;
+	
 	bool bDetectItem;
 
 	
 	void AttackTimeLoss();
 	void TargetFoundTimeLoss();
+	void EndTimeLoss();
 
-
+	TArray<AActor*> Weaponary;
+	TArray<AActor*> EnemyAry;
 
 	
 	
@@ -91,7 +109,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UItemSystem> ItemSystemComp;
 
 	void LightOn();
 	void Attack();
@@ -100,6 +119,7 @@ protected:
 	void Interact();
 	void Aim();
 	void NotAim();
+
 	
 	UFUNCTION()
 	void ActiveCrouch();
@@ -116,7 +136,7 @@ private:
 
 
 	
-
+	AActor* DetectedObject;
 
 	bool bDead;
 	bool bLight;

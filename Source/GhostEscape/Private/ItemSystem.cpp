@@ -12,7 +12,7 @@ UItemSystem::UItemSystem()
 
 	Pistol = false;
 	Rifle = false;
-
+	BookStack = false;
 	PistolAmmo = 0;
 	// ...
 }

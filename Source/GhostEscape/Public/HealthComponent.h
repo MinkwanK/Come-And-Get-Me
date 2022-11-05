@@ -3,8 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MyCivilian.h"
-
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
@@ -17,16 +15,18 @@ class GHOSTESCAPE_API UHealthComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UHealthComponent();
-
-	void LoseHealth(int amount,AMyCivilian* Civilian);
-
+	void LoseHealth(int Amount);
+	
+	int HP;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly,Category=Health)
-	int Health = 100;
+	
+private:
 
+	
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

@@ -110,7 +110,7 @@ void AMyPlayerController::ShowScaryGameOverWidget()
 		bShowMouseCursor = false;
 		ScaryGameOverWidget = CreateWidget<UScaryGameOver>(this,BP_ScaryGameOver);
 		ScaryGameOverWidget->AddToViewport();
-		UGameplayStatics::PlaySound2D(this,GameOverScarySound,1,1,0,nullptr,nullptr,true);
+		//UGameplayStatics::PlaySound2D(this,GameOverScarySound,1,1,0,nullptr,nullptr,true);
 	
 		
 		
